@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(cplusDemo)
+
+set(CMAKE_CXX_STANDARD 14)
+
+# 添加 Conan 包管理支持
+include_directories(${CMAKE_BINARY_DIR}/conaninclude)
+
+# 加载头文件
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# 打印CMAKE_CURRENT_SOURCE_DIR的目录信息
+message("目录信息：${CMAKE_CURRENT_SOURCE_DIR} ")
+
+# 用于添加头文件的搜索路径。它的作用是告诉编译器在哪些目录中查找头文件，以便在源代码中使用 #include 时可以正确找到对应的文件
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/com/zero/person)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/com/zero/utils)
+
+# 自动加载 src/com/zero/person 下的所有 .cpp 文件
+file(GLOB PERSON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/com/zero/person/*.cpp)
+file(GLOB PERSON_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/com/zero/utils/*.cpp)
+
+find_package(ZLIB REQUIRED)
+
+# 加载库文件
+add_executable(cplusDemo
+    src/main.cpp
+    ${PERSON_SOURCES}
+)
+
+# 将 ZLIB 库链接到目标
+target_link_libraries(cplusDemo PRIVATE ZLIB::ZLIB)
